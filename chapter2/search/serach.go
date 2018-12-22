@@ -9,6 +9,7 @@ import (
 // A map of registered matchers for searching.
 var matchers = make(map[string]Matcher)
 
+// Run performs the search logic
 func Run(searchTerm string) {
 	// Retrieve the list of feeds to search through.
 	feeds, err := RetrieveFeeds()
