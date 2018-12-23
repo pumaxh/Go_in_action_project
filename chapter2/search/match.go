@@ -3,6 +3,7 @@ package search
 
 import (
 	"log"
+	"fmt"
 )
 
 // Result contains the result of a search.
@@ -30,5 +31,15 @@ func Match(matcher Matcher, feed *Feed, searchTerm string, results chan<- *Resul
 	// Write the results to the channel.
 	for _, result := range searchResults {
 		results <- result
+	}
+}
+
+// Display writes results to the terminal window as they
+// are received by the individual goroutines.
+func Display(results chan *Result) {
+	// The channel blocks until a result is written to the channel.
+	// Once the channel is closed the for loop terminates.
+	for result := range results {
+		fmt.Printf("%s:\n%s\n\n", result.Field, result.Content)
 	}
 }
