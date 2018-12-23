@@ -18,10 +18,10 @@ func Run(searchTerm string) {
 	}
 
 	// Create a unbuffered channel to reveive match results.
-	results := make(chan *Results)
+	results := make(chan *Result)
 
 	// Setup a wait group so we can process all the feeds
-	var waitGroup sync.waitGroups
+	var waitGroup sync.WaitGroup
 
 	// Set the number of goroutines we need to wait for while
 	// they process the individual feeds.
