@@ -15,7 +15,7 @@ type Feed struct {
 }
 
 // RetrieveFeeds reads and unmarshals the feed data file.
-func RetrieveFeeds() ([] *Feed, error) {
+func RetrieveFeeds() ([]*Feed, error) {
 	// Open the file.
 	file, err := os.Open(dataFile)
 	if err != nil {

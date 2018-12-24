@@ -2,20 +2,20 @@
 package search
 
 import (
-	"log"
 	"fmt"
+	"log"
 )
 
 // Result contains the result of a search.
 type Result struct {
-	Field 	string
+	Field   string
 	Content string
 }
 
 // Matcher defines the behavior required by types that want
 // to implement a new search type.
 type Matcher interface {
-	Search(feed *Feed, searchTerm string) ([] *Result, error)
+	Search(feed *Feed, searchTerm string) ([]*Result, error)
 }
 
 // Match is launched as a goroutine for each individual feed to run
