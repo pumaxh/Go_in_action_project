@@ -46,7 +46,7 @@ type (
 		TTL            string   `xml:"ttl"`
 		Language       string   `xml:"language"`
 		ManagingEditor string   `xml:"managingEditor"`
-		WebMaster      string   `xml:"image"`
+		WebMaster      string   `xml:"WebMaster"`
 		Image          image    `xml:"image"`
 		Item           []item   `xml:"item"`
 	}
@@ -54,16 +54,61 @@ type (
 	// rssDocument defines the fields associated with the rss document
 	rssDocument struct {
 		XMLName xml.Name `xml:"rss"`
-		Channel channel `xml:"channel"`
+		Channel channel  `xml:"channel"`
 	}
 )
+
 // rssMatcher implements the Matcher interface
-type rssMatcher struct {}
+type rssMatcher struct{}
 
 // init registers the matcher with the programe
-func init()  {
+func init() {
 	var matcher rssMatcher
 	search.Register("rss", matcher)
+}
+
+// Search looks at the document for the specified search term.
+func (m rssMatcher) Search(feed *search.Feed, searchTerm string) ([]*search.Result, error) {
+	var results []*search.Result
+
+	log.Printf("Search Feed Type[%s] Site[%s] For Uri[%s]",
+		feed.Type, feed.Name, feed.URI)
+	// Retrieve the data to search
+	document, err := m.retrieve(feed)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, channelItem := range document.Channel.Item {
+		// Check the title for the search term.
+		matched, err := regexp.MatchString(searchTerm, channelItem.Title)
+		if err != nil {
+			return nil, err
+		}
+
+		// If we foud a match save the result.
+		if matched {
+			results = append(results, &search.Result{
+				Field:   "Title",
+				Content: channelItem.Title,
+			})
+		}
+
+		// Check the description for the search term.
+		matched, err = regexp.MatchString(searchTerm, channelItem.Description)
+		if err != nil {
+			return nil, err
+		}
+
+		// If we found a match save the result.
+		if matched {
+			results = append(results, &search.Result{
+				Field:   "Description",
+				Content: channelItem.Description,
+			})
+		}
+	}
+	return results, nil
 }
 
 // retrieve performs a HTTP Get request for the rss feed and decodes
