@@ -14,7 +14,7 @@ import (
 
 type (
 	// item defines the fields associated with the item tag
-	// int the rss document
+	// in the rss document
 	item struct {
 		XMLName     xml.Name `xml:"item"`
 		PubDate     string   `xml:"PubDate"`
