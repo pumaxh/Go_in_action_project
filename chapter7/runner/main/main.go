@@ -1,13 +1,13 @@
-// This sample program demonstrates how to use a channel to 
+// This sample program demonstrates how to use a channel to
 // monitor the amount of time the program is running and terminate
 // the program if it runs too long.
 package main
 
 import (
-	"log"
-	"time"
 	"github.com/Go_in_action_project/chapter7/runner"
+	"log"
 	"os"
+	"time"
 )
 
 // timeout is the number of second the program has to finish

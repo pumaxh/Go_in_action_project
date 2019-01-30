@@ -18,10 +18,10 @@ type Runner struct {
 	complete chan error
 
 	// timeout reports that time has run out
-	timeout <- chan time.Time
+	timeout <-chan time.Time
 
 	// tasks holds a set of functions that are executed synchronously in index order
-	tasks []func (int)
+	tasks []func(int)
 }
 
 // ErrTimeout is returned when a value is received on the timeout.
@@ -35,7 +35,7 @@ func New(d time.Duration) *Runner {
 	return &Runner{
 		interrupt: make(chan os.Signal, 1),
 		complete:  make(chan error),
-		timeout:  time.After(d),
+		timeout:   time.After(d),
 	}
 }
 
@@ -52,13 +52,13 @@ func (r *Runner) Start() error {
 	// Run the different tasks on a different goroutine.
 	go func() {
 		r.complete <- r.run()
-	} ()
+	}()
 
 	select {
 	// Signaled when processing is done.
-	case err := <- r.complete:
+	case err := <-r.complete:
 		return err
-	
+
 	// Signaled when we run out of time
 	case <-r.timeout:
 		return ErrTimeout

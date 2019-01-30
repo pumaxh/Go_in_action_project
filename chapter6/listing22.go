@@ -20,7 +20,7 @@ func main() {
 	wg.Add(1)
 
 	// First runner to his mark.
-	go  Runner(baton)
+	go Runner(baton)
 
 	// Start the race.
 	baton <- 1
@@ -34,7 +34,7 @@ func Runner(baton chan int) {
 	var newRunner int
 
 	// Wait to receive the baton.
-	runner := <- baton
+	runner := <-baton
 
 	// Start running around the track.
 	fmt.Printf("Runner %d Running With Baton\n", runner)
